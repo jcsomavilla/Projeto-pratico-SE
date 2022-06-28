@@ -11,7 +11,7 @@
 #define BAUDRATE_SERIAL     115200    //Utilizado para debug, no serial monitor
 
 /*LCD*/
-#define LCD_16X2_CLEAN_LINE     "     //evita efeito de flick, devido a atualizaçao com frequencia muito grande
+#define LCD_16X2_CLEAN_LINE     "                "     //evita efeito de flick, devido a atualizaçao com frequencia muito grande
 #define LCD_16X2_I2C_ADDRESS    0x27  // endereço I2C do display
 #define LCD_16X2_COLS           16
 #define LCD_16X2_ROWS           2
@@ -49,7 +49,7 @@ void task_MQ2(void *pvParameters);
 void task_ultrassonico(void *pvParameters);
 
 void setup() {
-  Serial.begin(BRAUDRATE_SERIAL); //inicializa o serial
+  Serial.begin(BAUDRATE_SERIAL); //inicializa o serial
 
   lcd.init(); //inicializa o LCD
   lcd.backlight(); //liga o backlight
@@ -96,9 +96,10 @@ void setup() {
    xTaskCreate(
     task_ultrassonico
     ,   (const portCHAR *)"ultrassonico"
-    ,   156
-    ,   3
-    ,   NULL );
+    ,  156  
+    ,  NULL
+    ,  3 
+    ,  NULL );
     
 }
 
@@ -122,7 +123,7 @@ void task_lcd(void *pvParameters ){
 
       distancia_cm - (int)distancia;
       sprintf (linha_str, "Dist: %d cm", distancia_cm); //formato a escrita no displau
-      lcd.print(linha_str); /
+      lcd.print(linha_str); 
       
       }
      if(xQueuePeek(fila_MQ2, &leitura_MQ2, TIMER_QUEUE_WAIT)){
@@ -134,25 +135,51 @@ void task_lcd(void *pvParameters ){
       lcd.print(linha_str);
       
       }
-      vTaskDelay (LCD_TIMER_VERIFIC / porTICK_PERIOD_MS); // tempo de verificação de atualização do display
+      vTaskDelay (LCD_TIMER_VERIFIC / portTICK_PERIOD_MS); // tempo de verificação de atualização do display
       // porTICK_PERIOD_MS converte o tempo setado em ms no LCD_TIMER_VERIFIC em ticks de processador.
     }
   }
 void task_MQ2( void *pvParameters){
   int leitura_analog = 0;
   while(1){
-    
+      leitura_analog = analogRead(ANALOG_A0);
+
+      //Insere leiturana fila
+      xQueueOverwrite(fila_MQ2, (void *)&leitura_analog);
+
+      //escreve a leiturana serial. Tentativa de controle do semafoto é feita
+      //até o tempo definido em TIME_SEMPH_WAIT
+
+      if(xSemaphoreTake(semaforo_serial, TIMER_SEMPH_WAIT) == pdTRUE){
+        Serial.print("- Leitura MQ-2: ");
+        Serial.println(leitura_analog);
+        xSemaphoreGive(semaforo_serial); 
+      }
+      vTaskDelay(MQ2_TIMER_LEITURA / portTICK_PERIOD_MS); //aguarda tempo determinado em MQ2_TIMER_LEITURA para realizar prox leitura;
     }
   }
+  
+void task_ultrassonico(void *pvParameters){
+  float distancia_cm = 0.0;
+  long microsec = 0;
 
+  while(1){
+    //mede distância em CM
+    microsec = ultrassonic.timing(); 
+    distancia_cm = ultrassonic.convert(microsec, Ultrasonic::CM);
 
+    //Insere leitura na fila
+    xQueueOverwrite(fila_ultrassonico, (void *)&distancia_cm); //fila unitária, prioriza sempre a ultima leitura
+    //escreve a leiturana serial. Tentativa de controle do semafoto é feita
+    //até o tempo definido em TIME_SEMPH_WAIT
 
+    if(xSemaphoreTake(semaforo_serial, TIMER_SEMPH_WAIT) == pdTRUE){
+      Serial.print("- Distancia: ");
+      Serial.print(distancia_cm);
+      Serial.println("cm");
+      xSemaphoreGive(semaforo_serial);
+    }
 
-
-
-
-
-
-
-
- 
+     vTaskDelay(ULTRASSONICO_TIMER_LEITURA / portTICK_PERIOD_MS); 
+  }
+}
