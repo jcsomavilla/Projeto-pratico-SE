@@ -1,0 +1,107 @@
+- Distancia: 3428.07cm
+- Leitura MQ-2: 78
+- Distancia: 7.69cm
+- Distancia: 3401.78cm
+- Leitura MQ-2: 79
+- Distancia: 7.80cm
+- Distancia: 3419.67cm
+- Leitura MQ-2: 77
+- Distancia: 7.82cm
+- Distancia: 3406.82cm
+- Leitura MQ-2: 77
+- Distancia: 7.69cm
+- Distancia: 3441.08cm
+- Leitura MQ-2: 77
+- Distancia: 7.71cm
+- Distancia: 3442.31cm
+- Leitura MQ-2: 78
+- Distancia: 7.69cm
+- Distancia: 3468.59cm
+- Leitura MQ-2: 78
+- Distancia: 7.80cm
+- Distancia: 3403.81cm
+- Leitura MQ-2: 78
+- Distancia: 7.80cm
+- Distancia: 3398.36cm
+- Leitura MQ-2: 77
+- Distancia: 7.80cm
+- Distancia: 3397.91cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 195.45cm
+- Leitura MQ-2: 77
+- Distancia: 3391.30cm
+- Leitura MQ-2: 79
+- Distancia: 7.71cm
+- Distancia: 3410.83cm
+- Leitura MQ-2: 77
+- Distancia: 7.69cm
+- Distancia: 3403.11cm
+- Leitura MQ-2: 78
+- Distancia: 7.69cm
+- Distancia: 3435.70cm
+- Leitura MQ-2: 79
+- Distancia: 7.82cm
+- Distancia: 3420.07cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3441.44cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3422.09cm
+- Leitura MQ-2: 78
+- Distancia: 7.69cm
+- Distancia: 3419.05cm
+- Leitura MQ-2: 77
+- Distancia: 7.69cm
+- Distancia: 3435.81cm
+- Leitura MQ-2: 78
+- Distancia: 7.71cm
+- Distancia: 3438.42cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3433.46cm
+- Leitura MQ-2: 77
+- Distancia: 7.82cm
+- Distancia: 3433.60cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3426.49cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3409.68cm
+- Leitura MQ-2: 78
+- Distancia: 7.71cm
+- Distancia: 3391.39cm
+- Leitura MQ-2: 79
+- Distancia: 7.69cm
+- Distancia: 3414.38cm
+- Leitura MQ-2: 78
+- Distancia: 7.69cm
+- Distancia: 3422.33cm
+- Leitura MQ-2: 77
+- Distancia: 7.82cm
+- Distancia: 3399.79cm
+- Leitura MQ-2: 77
+- Distancia: 7.82cm
+- Distancia: 3406.65cm
+- Leitura MQ-2: 78
+- Distancia: 7.69cm
+- Distancia: 3425.89cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3428.27cm
+- Leitura MQ-2: 77
+- Distancia: 7.82cm
+- Distancia: 3445.59cm
+- Leitura MQ-2: 77
+- Distancia: 7.69cm
+- Distancia: 3409.19cm
+- Leitura MQ-2: 79
+- Distancia: 7.82cm
+- Distancia: 3414.40cm
+- Leitura MQ-2: 78
+- Distancia: 7.82cm
+- Distancia: 3409.78cm
+- Leitura MQ-2: 77
+- Distancia: 7.82cm
