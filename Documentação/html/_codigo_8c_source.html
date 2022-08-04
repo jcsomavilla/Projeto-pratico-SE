@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.4"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Documentação: Código-Fonte de doc/Codigo.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Documentação<span id="projectnumber">&#160;1.1</span>
+   </div>
+   <div id="projectbrief">Documentaçao projeto de sistemas embarcados</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Gerado por Doxygen 1.9.4 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Busca','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Busca');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_e68e8157741866f444e17edd764ebbae.html">doc</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">Codigo.c</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_codigo_8c.html">Vá para a documentação desse arquivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &lt;Arduino_FreeRTOS.h&gt;</span>         <span class="comment">//inclusão do FreeRtos para arduino</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;queue.h&gt;</span>                    <span class="comment">//biblioteca para utlização de filas</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;task.h&gt;</span>                     <span class="comment">//biblioteca para utilização de tarefas</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;semphr.h&gt;</span>                   <span class="comment">//biblioteca para utilização de semáforos.</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;Wire.h&gt;</span>                     <span class="comment">//biblioteca para uso de dispositivos com comunicação I2C.</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;LiquidCrystal_I2C.h&gt;</span>        <span class="comment">//biblioteca do display</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Ultrasonic.h&gt;</span>               <span class="comment">//biblioteca do sensor ultrasonico</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">//DEFINIÇÕES</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a0444e34a8ce6707b86ac493ee55c2228">   10</a></span><span class="preprocessor">#define BAUDRATE_SERIAL                    115200 </span><span class="comment">//Utilizado para debug, no serial monitor</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">/*LCD*/</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a8dd8b4d67baf8fb0bb83f361ed2de393">   13</a></span><span class="preprocessor">#define LCD_16X2_CLEAN_LINE                &quot;                &quot;</span><span class="comment">//evita efeito de flick, devido a atualizaçao com frequencia muito grande</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="_codigo_8c.html#accabfc7ef575445cfff4abccefe96074">   14</a></span><span class="preprocessor">#define LCD_16X2_I2C_ADDRESS               0x27             </span><span class="comment">// endereço I2C do display</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a878ad6cfa530582610e60b12ce3bedcf">   15</a></span><span class="preprocessor">#define LCD_16X2_COLS                      16 </span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a0cb6f5cc3d64460a5ce7a0ff15c32492">   16</a></span><span class="preprocessor">#define LCD_16X2_ROWS                      2 </span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a9d88f9edfc6e6f6e36740cabef641001">   17</a></span><span class="preprocessor">#define LCD_TIMER_VERIFIC                  1000             </span><span class="comment">// a cada segundo, a tarefa do display verifica se há novas medições disponíveis.</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">/*Sensor Ultrassonico*/</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a8a0f3a3b6c3a60ef8ccdecdb87d924ed">   20</a></span><span class="preprocessor">#define ULTRASSONICO_TRIGGER                13  </span><span class="comment">//GPIO</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a4849491b2b17d0cfbb7e5fad1b66b9f1">   21</a></span><span class="preprocessor">#define ULTRASSONICO_ECHO                   12  </span><span class="comment">//GPIO</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a4b164137ae3091e9773b50188d0faad8">   22</a></span><span class="preprocessor">#define ULTRASSONICO_TIMER_LEITURA          500 </span><span class="comment">//tempo de verificação de leitura do sensor(a cada meio segundo)</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">/*Sensor MQ2*/</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a08be880f4d7d4d820257f5d733e22ffc">   25</a></span><span class="preprocessor">#define ANALOG_A0                0               </span><span class="comment">// DEFINIÇÃO DA PORTA A0 ANALOGICA</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a0a2068ad8264cb9f26218254cbc89749">   26</a></span><span class="preprocessor">#define MQ2_TIMER_LEITURA        1000           </span><span class="comment">//utiliza a leitura em 1 segundo</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">/*Tomada de Controle*/</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a145c889e0dfd8706237750b3e2613616">   29</a></span><span class="preprocessor">#define TIMER_SEMPH_WAIT        ( TickType_t ) 100  </span><span class="comment">//tempo para aguardar a tomada de controle do semáforo.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="_codigo_8c.html#ab15bd323781ab49a2a8111a20632c6ce">   30</a></span><span class="preprocessor">#define TIMER_QUEUE_WAIT        ( TickType_t ) 100  </span><span class="comment">//tempo para aguardar tomada de controle da fila.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">/* filas*/</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">   33</a></span>QueueHandle_t <a class="code hl_variable" href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">fila_MQ2</a>;              <span class="comment">//fila mq2</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">   34</a></span>QueueHandle_t <a class="code hl_variable" href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">fila_ultrassonico</a>;    <span class="comment">//fila sensor ultrassonico</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">/* semaforos */</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">   37</a></span>SemaphoreHandle_t <a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a>;  <span class="comment">//semaforo usado para controlar o uso do serial, que é compartilhado entre ambas tarefas.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">   39</a></span>LiquidCrystal_I2C <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>(<a class="code hl_define" href="_codigo_8c.html#accabfc7ef575445cfff4abccefe96074">LCD_16X2_I2C_ADDRESS</a>, </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                      <a class="code hl_define" href="_codigo_8c.html#a878ad6cfa530582610e60b12ce3bedcf">LCD_16X2_COLS</a>, </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                      <a class="code hl_define" href="_codigo_8c.html#a0cb6f5cc3d64460a5ce7a0ff15c32492">LCD_16X2_ROWS</a>); <span class="comment">//controle do lcd, parametros: endereço, coluna e linhas</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a2ab85759ce6369f755e398f236381a92">   43</a></span>Ultrasonic <a class="code hl_function" href="_codigo_8c.html#a2ab85759ce6369f755e398f236381a92">ultrasonic</a>(<a class="code hl_define" href="_codigo_8c.html#a8a0f3a3b6c3a60ef8ccdecdb87d924ed">ULTRASSONICO_TRIGGER</a>, <a class="code hl_define" href="_codigo_8c.html#a4849491b2b17d0cfbb7e5fad1b66b9f1">ULTRASSONICO_ECHO</a>); <span class="comment">//controle do sensor ultrassonico</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">/*Protótipo das Tarefas*/</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">/*Todas as tarefas dos dispositivos, retornam void, e também recebem um ponteiro do </span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">tipo void como parametro. Segue este padrão como requisito para criação de tarefas no FreeRTOS.*/</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#ae9e4cb1f0bcd39c3e51521cda6b6f0c4">task_lcd</a>( <span class="keywordtype">void</span> *pvParameters );</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#a069106b1e2527d336d1d62041813d79d">task_MQ2</a>( <span class="keywordtype">void</span> *pvParameters );</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#a63f2c899e621a1b80b8ffee708b1ae68">task_ultrassonico</a>( <span class="keywordtype">void</span> *pvParameters );                     </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a4fc01d736fe50cf5b977f755b675f11d">   53</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a>(){</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    Serial.begin(<a class="code hl_define" href="_codigo_8c.html#a0444e34a8ce6707b86ac493ee55c2228">BAUDRATE_SERIAL</a>);  <span class="comment">//inicializa o serial</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.init();       <span class="comment">//inicializa o LCD</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.backlight();  <span class="comment">//liga o backlight</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.clear();      <span class="comment">//limpa o LCD.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="comment">/* Criação das filas  */</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_variable" href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">fila_MQ2</a> = xQueueCreate( 1, <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>) );              <span class="comment">//aloca-se um espaço de memória com a função xQueueCreate</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <a class="code hl_variable" href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">fila_ultrassonico</a> = xQueueCreate( 1, <span class="keyword">sizeof</span>(<span class="keywordtype">float</span>) );</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="comment">/*Validação das filas*/</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordflow">if</span> ( (<a class="code hl_variable" href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">fila_MQ2</a> == NULL) || (<a class="code hl_variable" href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">fila_ultrassonico</a> == NULL) )    {</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        Serial.println(<span class="stringliteral">&quot;Fila MQ2 ou Ultrasonico não criado.&quot;</span>);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        Serial.println(<span class="stringliteral">&quot;Encerrando o programa.&quot;</span>);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">while</span>(1){</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>          </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    }</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="comment">/* Criação do semáforo */</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a> = xSemaphoreCreateMutex();</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>     <span class="comment">/*Valida o Semaforo*/</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a> == NULL){</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        Serial.println(<span class="stringliteral">&quot;Semaforo não criado.&quot;</span>);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        Serial.println(<span class="stringliteral">&quot;Encerrando o programa.&quot;</span>);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">while</span>(1){</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>          </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        }</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    }</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">/* Criação das tarefas */</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    xTaskCreate(</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>      <a class="code hl_function" href="_codigo_8c.html#ae9e4cb1f0bcd39c3e51521cda6b6f0c4">task_lcd</a>                     </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>      ,  (<span class="keyword">const</span> portCHAR *)<span class="stringliteral">&quot;lcd&quot;</span>   <span class="comment">//nome</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>      ,  156                       <span class="comment">//tamanho (em palavra)</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>      ,  NULL                      <span class="comment">//parametro passado (como nao possui, usa-se null</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>      ,  1                         <span class="comment">//prioridade da tarefa</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>      ,  NULL );                   <span class="comment">//handle da tarefa (opcional)</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    xTaskCreate(</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>      <a class="code hl_function" href="_codigo_8c.html#a069106b1e2527d336d1d62041813d79d">task_MQ2</a></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>      ,  (<span class="keyword">const</span> portCHAR *) <span class="stringliteral">&quot;MQ2&quot;</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>      ,  156  </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>      ,  NULL</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>      ,  2 </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>      ,  NULL );</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    xTaskCreate(</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>      <a class="code hl_function" href="_codigo_8c.html#a63f2c899e621a1b80b8ffee708b1ae68">task_ultrassonico</a></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>      ,  (<span class="keyword">const</span> portCHAR *)<span class="stringliteral">&quot;ultrassonico&quot;</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>      ,  156  </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>      ,  NULL</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>      ,  3 </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>      ,  NULL );</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>}</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="_codigo_8c.html#afe461d27b9c48d5921c00d521181f12f">  112</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#afe461d27b9c48d5921c00d521181f12f">loop</a>() </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>{</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="comment">// tudo é realizado pelas tarefas, portando não é necessário programar neste bloco.</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno"><a class="line" href="_codigo_8c.html#ae9e4cb1f0bcd39c3e51521cda6b6f0c4">  117</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#ae9e4cb1f0bcd39c3e51521cda6b6f0c4">task_lcd</a>( <span class="keywordtype">void</span> *pvParameters ){</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="keywordtype">float</span> distancia = 0.0;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="keywordtype">int</span> leitura_MQ2 = 0;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keywordtype">char</span> linha_str[16] = {0x00};  <span class="comment">//formata a linha a ser escrita no display</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="keywordtype">int</span> distancia_cm = 0;         <span class="comment">//mostra somente a parte inteira da distancia, porém o decimal é transportado para fila </span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordflow">while</span>(1){</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>      <span class="comment">// xQueuePeek -&gt; &quot;espia&quot; a fila do sensor</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <span class="keywordflow">if</span>( xQueuePeek(<a class="code hl_variable" href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">fila_ultrassonico</a>, &amp;distancia, <a class="code hl_define" href="_codigo_8c.html#ab15bd323781ab49a2a8111a20632c6ce">TIMER_QUEUE_WAIT</a>) ){  <span class="comment">//escreve a ultima leitura do sensor</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.setCursor(0,0);                                             <span class="comment">//posiciono no começo da linha no display</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.print(<a class="code hl_define" href="_codigo_8c.html#a8dd8b4d67baf8fb0bb83f361ed2de393">LCD_16X2_CLEAN_LINE</a>);                                 <span class="comment">//escrevo uma linha &quot;em branco&quot;</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.setCursor(0,0);                                             <span class="comment">//reposiciono no começo da linha</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            distancia_cm = (int)distancia;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            sprintf (linha_str, <span class="stringliteral">&quot;Dist: %d cm&quot;</span>, distancia_cm);              <span class="comment">//formato a escrita no displaY</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.print(linha_str);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        }</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        <span class="keywordflow">if</span>( xQueuePeek(<a class="code hl_variable" href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">fila_MQ2</a>, &amp;leitura_MQ2, <a class="code hl_define" href="_codigo_8c.html#ab15bd323781ab49a2a8111a20632c6ce">TIMER_QUEUE_WAIT</a>) ){</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.setCursor(0,1);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.print(<a class="code hl_define" href="_codigo_8c.html#a8dd8b4d67baf8fb0bb83f361ed2de393">LCD_16X2_CLEAN_LINE</a>);</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.setCursor(0,1);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            sprintf (linha_str, <span class="stringliteral">&quot;MQ2: %d&quot;</span>, leitura_MQ2);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>            <a class="code hl_function" href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a>.print(linha_str);</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        }</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        vTaskDelay( <a class="code hl_define" href="_codigo_8c.html#a9d88f9edfc6e6f6e36740cabef641001">LCD_TIMER_VERIFIC</a> / portTICK_PERIOD_MS ); <span class="comment">// tempo de verificação de atualização do display</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="comment">// porTICK_PERIOD_MS converte o tempo setado em ms no LCD_TIMER_VERIFIC em ticks de processador.</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    }</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>}</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a069106b1e2527d336d1d62041813d79d">  151</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#a069106b1e2527d336d1d62041813d79d">task_MQ2</a>( <span class="keywordtype">void</span> *pvParameters ){</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordtype">int</span> leitura_analogica = 0;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keywordtype">int</span> Pinbuzzer = 8; <span class="comment">//PINO UTILIZADO PELO BUZZER</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keywordtype">int</span> pinled = 7; <span class="comment">//PINO UTILIZADO PELO LED</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keywordtype">int</span> leitura_sensor = 400;<span class="comment">//DEFININDO UM VALOR LIMITE (NÍVEL DE GÁS NORMAL)</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keywordflow">while</span>(1){</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        leitura_analogica = analogRead(<a class="code hl_define" href="_codigo_8c.html#a08be880f4d7d4d820257f5d733e22ffc">ANALOG_A0</a>);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        <span class="comment">//Insere leitura na fila</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        xQueueOverwrite(<a class="code hl_variable" href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">fila_MQ2</a>, (<span class="keywordtype">void</span> *)&amp;leitura_analogica);</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>       <span class="comment">/*escreve a leiturana serial. Tentativa de controle do semafoto é feita</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">         até o tempo definido em TIME_SEMPH_WAIT*/</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>      </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>       <span class="keywordflow">if</span> ( xSemaphoreTake(<a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a>, <a class="code hl_define" href="_codigo_8c.html#a145c889e0dfd8706237750b3e2613616">TIMER_SEMPH_WAIT</a> ) == pdTRUE ){</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>           Serial.print(<span class="stringliteral">&quot;- Leitura MQ-2: &quot;</span>);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>           Serial.println(leitura_analogica);</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>           xSemaphoreGive(<a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a>);</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>       }</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>      </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        vTaskDelay( <a class="code hl_define" href="_codigo_8c.html#a0a2068ad8264cb9f26218254cbc89749">MQ2_TIMER_LEITURA</a>/ portTICK_PERIOD_MS );  <span class="comment">//aguarda tempo determinado em MQ2_TIMER_LEITURA para realizar prox leitura;</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        </div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        pinMode(<a class="code hl_define" href="_codigo_8c.html#a08be880f4d7d4d820257f5d733e22ffc">ANALOG_A0</a>, INPUT); <span class="comment">//DEFINE O PINO COMO ENTRADA</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        pinMode(Pinbuzzer, OUTPUT); <span class="comment">//DEFINE O PINO COMO SAÍDA</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        pinMode(pinled, OUTPUT); <span class="comment">//DEFINE O PINO COMO SAIDA</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        Serial.begin(115200);<span class="comment">//INICIALIZA A SERIAL</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        <span class="keywordtype">int</span> valor_analogico = analogRead(<a class="code hl_define" href="_codigo_8c.html#a08be880f4d7d4d820257f5d733e22ffc">ANALOG_A0</a>); <span class="comment">//VARIÁVEL RECEBE O VALOR LIDO NO PINO ANALÓGICO</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        <span class="keywordflow">if</span> (valor_analogico &gt; leitura_sensor){<span class="comment">//SE VALOR LIDO NO PINO ANALÓGICO FOR MAIOR QUE O VALOR LIMITE, FAZ </span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>             digitalWrite(Pinbuzzer, HIGH); <span class="comment">//ATIVA O BUZZER E O MESMO EMITE O SINAL SONORO</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>             digitalWrite(pinled, HIGH); <span class="comment">//ativa o led</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>         }</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>         <span class="keywordflow">else</span>{ <span class="comment">//SENÃO, FAZ</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>             digitalWrite(Pinbuzzer, LOW);<span class="comment">//BUZZER DESLIGADO</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>             digitalWrite(pinled, LOW);<span class="comment">//LED DESLIGADO</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>         }</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>         delay(100); <span class="comment">//INTERVALO DE 100 MILISSEGUNDOS</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    }</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>}</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="_codigo_8c.html#a63f2c899e621a1b80b8ffee708b1ae68">  194</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_codigo_8c.html#a63f2c899e621a1b80b8ffee708b1ae68">task_ultrassonico</a>( <span class="keywordtype">void</span> *pvParameters ){</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keywordtype">float</span> distancia_cm = 0.0;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keywordtype">long</span> microsec = 0;</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    <span class="keywordflow">while</span>(1){</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>       <span class="comment">//mede distância em CM</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>       microsec = <a class="code hl_function" href="_codigo_8c.html#a2ab85759ce6369f755e398f236381a92">ultrasonic</a>.timing();</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>       distancia_cm = <a class="code hl_function" href="_codigo_8c.html#a2ab85759ce6369f755e398f236381a92">ultrasonic</a>.convert(microsec, Ultrasonic::CM);</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>       <span class="comment">//Insere leitura na fila</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>       xQueueOverwrite(<a class="code hl_variable" href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">fila_ultrassonico</a>, (<span class="keywordtype">void</span> *)&amp;distancia_cm);</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>       <span class="comment">/*escreve a leiturana serial. Tentativa de controle do semafoto é feita</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="comment">         até o tempo definido em TIME_SEMPH_WAIT*/</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>         </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>       <span class="keywordflow">if</span> ( xSemaphoreTake(<a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a>, <a class="code hl_define" href="_codigo_8c.html#a145c889e0dfd8706237750b3e2613616">TIMER_SEMPH_WAIT</a> ) == pdTRUE ){</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>           Serial.print(<span class="stringliteral">&quot;- Distancia: &quot;</span>);</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>           Serial.print(distancia_cm);</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>           Serial.println(<span class="stringliteral">&quot;cm&quot;</span>);</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>           xSemaphoreGive(<a class="code hl_variable" href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a>);</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>       }</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>       vTaskDelay( <a class="code hl_define" href="_codigo_8c.html#a4b164137ae3091e9773b50188d0faad8">ULTRASSONICO_TIMER_LEITURA</a> / portTICK_PERIOD_MS );</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    }    </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>}</div>
+<div class="ttc" id="a_codigo_8c_html_a0444e34a8ce6707b86ac493ee55c2228"><div class="ttname"><a href="_codigo_8c.html#a0444e34a8ce6707b86ac493ee55c2228">BAUDRATE_SERIAL</a></div><div class="ttdeci">#define BAUDRATE_SERIAL</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00010">Codigo.c:10</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a069106b1e2527d336d1d62041813d79d"><div class="ttname"><a href="_codigo_8c.html#a069106b1e2527d336d1d62041813d79d">task_MQ2</a></div><div class="ttdeci">void task_MQ2(void *pvParameters)</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00151">Codigo.c:151</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a08be880f4d7d4d820257f5d733e22ffc"><div class="ttname"><a href="_codigo_8c.html#a08be880f4d7d4d820257f5d733e22ffc">ANALOG_A0</a></div><div class="ttdeci">#define ANALOG_A0</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00025">Codigo.c:25</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a0a2068ad8264cb9f26218254cbc89749"><div class="ttname"><a href="_codigo_8c.html#a0a2068ad8264cb9f26218254cbc89749">MQ2_TIMER_LEITURA</a></div><div class="ttdeci">#define MQ2_TIMER_LEITURA</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00026">Codigo.c:26</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a0cb6f5cc3d64460a5ce7a0ff15c32492"><div class="ttname"><a href="_codigo_8c.html#a0cb6f5cc3d64460a5ce7a0ff15c32492">LCD_16X2_ROWS</a></div><div class="ttdeci">#define LCD_16X2_ROWS</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00016">Codigo.c:16</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a145c889e0dfd8706237750b3e2613616"><div class="ttname"><a href="_codigo_8c.html#a145c889e0dfd8706237750b3e2613616">TIMER_SEMPH_WAIT</a></div><div class="ttdeci">#define TIMER_SEMPH_WAIT</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00029">Codigo.c:29</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a20fe30ef3d36cf5945a3a666c4dc241a"><div class="ttname"><a href="_codigo_8c.html#a20fe30ef3d36cf5945a3a666c4dc241a">lcd</a></div><div class="ttdeci">LiquidCrystal_I2C lcd(LCD_16X2_I2C_ADDRESS, LCD_16X2_COLS, LCD_16X2_ROWS)</div></div>
+<div class="ttc" id="a_codigo_8c_html_a2ab85759ce6369f755e398f236381a92"><div class="ttname"><a href="_codigo_8c.html#a2ab85759ce6369f755e398f236381a92">ultrasonic</a></div><div class="ttdeci">Ultrasonic ultrasonic(ULTRASSONICO_TRIGGER, ULTRASSONICO_ECHO)</div></div>
+<div class="ttc" id="a_codigo_8c_html_a4849491b2b17d0cfbb7e5fad1b66b9f1"><div class="ttname"><a href="_codigo_8c.html#a4849491b2b17d0cfbb7e5fad1b66b9f1">ULTRASSONICO_ECHO</a></div><div class="ttdeci">#define ULTRASSONICO_ECHO</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00021">Codigo.c:21</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a4b164137ae3091e9773b50188d0faad8"><div class="ttname"><a href="_codigo_8c.html#a4b164137ae3091e9773b50188d0faad8">ULTRASSONICO_TIMER_LEITURA</a></div><div class="ttdeci">#define ULTRASSONICO_TIMER_LEITURA</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00022">Codigo.c:22</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a4fc01d736fe50cf5b977f755b675f11d"><div class="ttname"><a href="_codigo_8c.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a></div><div class="ttdeci">void setup()</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00053">Codigo.c:53</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a63f2c899e621a1b80b8ffee708b1ae68"><div class="ttname"><a href="_codigo_8c.html#a63f2c899e621a1b80b8ffee708b1ae68">task_ultrassonico</a></div><div class="ttdeci">void task_ultrassonico(void *pvParameters)</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00194">Codigo.c:194</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a878ad6cfa530582610e60b12ce3bedcf"><div class="ttname"><a href="_codigo_8c.html#a878ad6cfa530582610e60b12ce3bedcf">LCD_16X2_COLS</a></div><div class="ttdeci">#define LCD_16X2_COLS</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00015">Codigo.c:15</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a8a0f3a3b6c3a60ef8ccdecdb87d924ed"><div class="ttname"><a href="_codigo_8c.html#a8a0f3a3b6c3a60ef8ccdecdb87d924ed">ULTRASSONICO_TRIGGER</a></div><div class="ttdeci">#define ULTRASSONICO_TRIGGER</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00020">Codigo.c:20</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a8ae9bff0b867541136f1c685c4d6facb"><div class="ttname"><a href="_codigo_8c.html#a8ae9bff0b867541136f1c685c4d6facb">fila_ultrassonico</a></div><div class="ttdeci">QueueHandle_t fila_ultrassonico</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00034">Codigo.c:34</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a8dd8b4d67baf8fb0bb83f361ed2de393"><div class="ttname"><a href="_codigo_8c.html#a8dd8b4d67baf8fb0bb83f361ed2de393">LCD_16X2_CLEAN_LINE</a></div><div class="ttdeci">#define LCD_16X2_CLEAN_LINE</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00013">Codigo.c:13</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_a9d88f9edfc6e6f6e36740cabef641001"><div class="ttname"><a href="_codigo_8c.html#a9d88f9edfc6e6f6e36740cabef641001">LCD_TIMER_VERIFIC</a></div><div class="ttdeci">#define LCD_TIMER_VERIFIC</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00017">Codigo.c:17</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_aa8455f59d960daa64a3d17682f0ea562"><div class="ttname"><a href="_codigo_8c.html#aa8455f59d960daa64a3d17682f0ea562">fila_MQ2</a></div><div class="ttdeci">QueueHandle_t fila_MQ2</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00033">Codigo.c:33</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_ab15bd323781ab49a2a8111a20632c6ce"><div class="ttname"><a href="_codigo_8c.html#ab15bd323781ab49a2a8111a20632c6ce">TIMER_QUEUE_WAIT</a></div><div class="ttdeci">#define TIMER_QUEUE_WAIT</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00030">Codigo.c:30</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_accabfc7ef575445cfff4abccefe96074"><div class="ttname"><a href="_codigo_8c.html#accabfc7ef575445cfff4abccefe96074">LCD_16X2_I2C_ADDRESS</a></div><div class="ttdeci">#define LCD_16X2_I2C_ADDRESS</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00014">Codigo.c:14</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_ad92e4a23782f2c0c7bd7d0ae143ae450"><div class="ttname"><a href="_codigo_8c.html#ad92e4a23782f2c0c7bd7d0ae143ae450">semaforo_serial</a></div><div class="ttdeci">SemaphoreHandle_t semaforo_serial</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00037">Codigo.c:37</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_ae9e4cb1f0bcd39c3e51521cda6b6f0c4"><div class="ttname"><a href="_codigo_8c.html#ae9e4cb1f0bcd39c3e51521cda6b6f0c4">task_lcd</a></div><div class="ttdeci">void task_lcd(void *pvParameters)</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00117">Codigo.c:117</a></div></div>
+<div class="ttc" id="a_codigo_8c_html_afe461d27b9c48d5921c00d521181f12f"><div class="ttname"><a href="_codigo_8c.html#afe461d27b9c48d5921c00d521181f12f">loop</a></div><div class="ttdeci">void loop()</div><div class="ttdef"><b>Definition:</b> <a href="_codigo_8c_source.html#l00112">Codigo.c:112</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Gerado por&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+</small></address>
+</body>
+</html>

@@ -150,6 +150,10 @@ void task_lcd( void *pvParameters ){
 
 void task_MQ2( void *pvParameters ){
     int leitura_analogica = 0;
+    int Pinbuzzer = 8; //PINO UTILIZADO PELO BUZZER
+    int pinled = 7; //PINO UTILIZADO PELO LED
+
+    int leitura_sensor = 400;//DEFININDO UM VALOR LIMITE (NÍVEL DE GÁS NORMAL)
 
     while(1){
         leitura_analogica = analogRead(ANALOG_A0);
@@ -167,9 +171,26 @@ void task_MQ2( void *pvParameters ){
        }
       
         vTaskDelay( MQ2_TIMER_LEITURA/ portTICK_PERIOD_MS );  //aguarda tempo determinado em MQ2_TIMER_LEITURA para realizar prox leitura;
-    }
-}
+        
+        pinMode(ANALOG_A0, INPUT); //DEFINE O PINO COMO ENTRADA
+        pinMode(Pinbuzzer, OUTPUT); //DEFINE O PINO COMO SAÍDA
+        pinMode(pinled, OUTPUT); //DEFINE O PINO COMO SAIDA
+        Serial.begin(115200);//INICIALIZA A SERIAL
 
+        int valor_analogico = analogRead(ANALOG_A0); //VARIÁVEL RECEBE O VALOR LIDO NO PINO ANALÓGICO
+        
+        if (valor_analogico > leitura_sensor){//SE VALOR LIDO NO PINO ANALÓGICO FOR MAIOR QUE O VALOR LIMITE, FAZ 
+             digitalWrite(Pinbuzzer, HIGH); //ATIVA O BUZZER E O MESMO EMITE O SINAL SONORO
+             digitalWrite(pinled, HIGH); //ativa o led
+         }
+         else{ //SENÃO, FAZ
+             digitalWrite(Pinbuzzer, LOW);//BUZZER DESLIGADO
+             digitalWrite(pinled, LOW);//LED DESLIGADO
+         }
+         delay(100); //INTERVALO DE 100 MILISSEGUNDOS
+    }
+    
+}
 void task_ultrassonico( void *pvParameters ){
     float distancia_cm = 0.0;
     long microsec = 0;
